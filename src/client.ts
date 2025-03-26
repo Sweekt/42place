@@ -37,16 +37,16 @@ function draw() {
 }
 
 // 🖱 Gestion du déplacement (drag & drop)
-canvas.addEventListener("mousedown", (e) => {
+canvas.addEventListener("mousedown", (event) => {
     isDragging = true;
-    startX = e.clientX - offsetX;
-    startY = e.clientY - offsetY;
+    startX = event.clientX - offsetX;
+    startY = event.clientY - offsetY;
 });
 
-canvas.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", (event) => {
     if (!isDragging) return;
-    offsetX = e.clientX - startX;
-    offsetY = e.clientY - startY;
+    offsetX = event.clientX - startX;
+    offsetY = event.clientY - startY;
     draw();
 });
 
@@ -55,13 +55,13 @@ canvas.addEventListener("mouseup", () => {
 });
 
 // 🎡 Gestion du zoom avec la molette
-canvas.addEventListener("wheel", (e) => {
-    e.preventDefault();
+canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
     const scaleFactor = 1.1;
-    const mouseX = e.clientX - canvas.getBoundingClientRect().left;
-    const mouseY = e.clientY - canvas.getBoundingClientRect().top;
+    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
-    const newScale = e.deltaY < 0 ? scale * scaleFactor : scale / scaleFactor;
+    const newScale = event.deltaY < 0 ? scale * scaleFactor : scale / scaleFactor;
 
     // Limite le zoom (optionnel)
     if (newScale < 0.5 || newScale > 10) return;
@@ -74,10 +74,10 @@ canvas.addEventListener("wheel", (e) => {
 });
 
 // 🖌 Modifier un pixel au clic
-canvas.addEventListener("click", (e) => {
+canvas.addEventListener("click", (event) => {
     const rect = canvas.getBoundingClientRect();
-    const mouseX = (e.clientX - rect.left - offsetX) / scale;
-    const mouseY = (e.clientY - rect.top - offsetY) / scale;
+    const mouseX = (event.clientX - rect.left - offsetX) / scale;
+    const mouseY = (event.clientY - rect.top - offsetY) / scale;
 
     const x = Math.floor(mouseX / pixelSize);
     const y = Math.floor(mouseY / pixelSize);
