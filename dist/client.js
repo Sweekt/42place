@@ -1,6 +1,14 @@
 const canvas = document.getElementById("gameCanvas");
+document.body.appendChild(canvas);
 const ctx = canvas.getContext("2d");
-const gridSize = 50; // Taille de la grille (ex: 50x50 pixels)
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    draw();
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // Appel initial pour ajuster la taille dès le début
+const gridSize = 200; // Taille de la grille (ex: 50x50 pixels)
 const pixelSize = 10; // Taille d'un pixel au départ
 let offsetX = 0, offsetY = 0;
 let scale = 1;
@@ -12,7 +20,8 @@ const pixels = Array.from({ length: gridSize }, () => Array.from({ length: gridS
 function draw() {
     if (!ctx)
         return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#3d3d3d";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.translate(offsetX, offsetY);
     ctx.scale(scale, scale);
@@ -20,35 +29,35 @@ function draw() {
         for (let x = 0; x < gridSize; x++) {
             ctx.fillStyle = pixels[y][x];
             ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-            ctx.strokeStyle = "rgba(0,0,0,0.2)";
-            ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+            //ctx.strokeStyle = "rgba(0,0,0,0.2)";
+            //ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
         }
     }
     ctx.restore();
 }
 // 🖱 Gestion du déplacement (drag & drop)
-canvas.addEventListener("mousedown", (e) => {
+canvas.addEventListener("mousedown", (event) => {
     isDragging = true;
-    startX = e.clientX - offsetX;
-    startY = e.clientY - offsetY;
+    startX = event.clientX - offsetX;
+    startY = event.clientY - offsetY;
 });
-canvas.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", (event) => {
     if (!isDragging)
         return;
-    offsetX = e.clientX - startX;
-    offsetY = e.clientY - startY;
+    offsetX = event.clientX - startX;
+    offsetY = event.clientY - startY;
     draw();
 });
 canvas.addEventListener("mouseup", () => {
     isDragging = false;
 });
 // 🎡 Gestion du zoom avec la molette
-canvas.addEventListener("wheel", (e) => {
-    e.preventDefault();
+canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
     const scaleFactor = 1.1;
-    const mouseX = e.clientX - canvas.getBoundingClientRect().left;
-    const mouseY = e.clientY - canvas.getBoundingClientRect().top;
-    const newScale = e.deltaY < 0 ? scale * scaleFactor : scale / scaleFactor;
+    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+    const newScale = event.deltaY < 0 ? scale * scaleFactor : scale / scaleFactor;
     // Limite le zoom (optionnel)
     if (newScale < 0.5 || newScale > 10)
         return;
@@ -58,10 +67,10 @@ canvas.addEventListener("wheel", (e) => {
     draw();
 });
 // 🖌 Modifier un pixel au clic
-canvas.addEventListener("click", (e) => {
+canvas.addEventListener("click", (event) => {
     const rect = canvas.getBoundingClientRect();
-    const mouseX = (e.clientX - rect.left - offsetX) / scale;
-    const mouseY = (e.clientY - rect.top - offsetY) / scale;
+    const mouseX = (event.clientX - rect.left - offsetX) / scale;
+    const mouseY = (event.clientY - rect.top - offsetY) / scale;
     const x = Math.floor(mouseX / pixelSize);
     const y = Math.floor(mouseY / pixelSize);
     if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {

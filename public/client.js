@@ -33,8 +33,8 @@ function draw() {
         for (var x = 0; x < gridSize; x++) {
             ctx.fillStyle = pixels[y][x];
             ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-            ctx.strokeStyle = "rgba(0,0,0,0.2)";
-            ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+            //ctx.strokeStyle = "rgba(0,0,0,0.2)";
+            //ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
         }
     }
     ctx.restore();
